@@ -1,0 +1,73 @@
+@import url(https://fonts.googleapis.com/css2?family=Girassol&display=swap);
+
+$primary: #e26d5a;
+$color2: #172a3a;
+$color3: #c30000;
+$link: #c30000;
+$light: #f6e8ea;
+$dark: #262626;
+
+$font-stack-themed: "Girassol", "Roboto", sans-serif;
+
+// common styles to be inherited by most of apps styles...
+%common {
+  font-family: $font-stack-themed;
+}
+
+.App {
+  background-color: $primary;
+}
+
+.CardsTable {
+  border-radius: 20vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 5vh 10vw;
+}
+
+%Card {
+  @extend %common;
+  align-items: center;
+  background-color: $light;
+  border-radius: 8px;
+  display: flex;
+  filter: drop-shadow(0.2vw 0.2vw 0.2vw $dark);
+  flex-direction: column;
+  height: 11.2vw;
+  justify-content: space-between;
+  margin: 1vw;
+  padding: 0.5vw;
+  user-select: none;
+  width: 8vw;
+}
+
+.red-suit {
+  @extend %Card;
+  border: 1px solid $color3;
+  color: $color3;
+}
+
+.black-suit {
+  @extend %Card;
+  border: 1px solid $dark;
+  color: $dark;
+}
+
+%suit {
+  font-size: 1.5vw;
+}
+
+.top-suit {
+  @extend %suit;
+  align-self: flex-end;
+}
+
+.bottom-suit {
+  @extend %suit;
+  align-self: flex-start;
+}
+
+.face {
+  font-size: 5vw;
+}
