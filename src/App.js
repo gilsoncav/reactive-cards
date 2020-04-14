@@ -63,6 +63,10 @@ class CardModel {
     get isBlackSuit() {
         return this.suit === kCLUBS || this.suit === kSPADES;
     }
+
+    get key() {
+        return this.face + this.suit;
+    }
 }
 
 const CardsTable = () => {
@@ -73,7 +77,7 @@ const CardsTable = () => {
     return (
         <div className='CardsTable'>
             {cards.map((card) =>(
-                <Card cardModel={card}>
+                <Card key={card.key} cardModel={card}>
                 </Card>
             ))}
         </div>
@@ -82,10 +86,10 @@ const CardsTable = () => {
 
 const Card = ({cardModel}) => {
     return (
-        <div className={cardModel.isRedSuit ? 'red-suit' : 'black-suit'}>
-            <span className='top-suit'>{cardModel.suit}</span>
+        <div className={cardModel.isRedSuit ? 'redSuit' : 'blackSuit'}>
+            <span className='topSuit'>{cardModel.suit}</span>
             <span className='face'>{cardModel.face}</span>
-            <span className='bottom-suit'>{cardModel.suit}</span>
+            <span className='bottomSuit'>{cardModel.suit}</span>
         </div>
     )
 }

@@ -42,13 +42,13 @@ $font-stack-themed: "Girassol", "Roboto", sans-serif;
   width: 8vw;
 }
 
-.red-suit {
+.redSuit {
   @extend %Card;
   border: 1px solid $color3;
   color: $color3;
 }
 
-.black-suit {
+.blackSuit {
   @extend %Card;
   border: 1px solid $dark;
   color: $dark;
@@ -58,12 +58,12 @@ $font-stack-themed: "Girassol", "Roboto", sans-serif;
   font-size: 1.5vw;
 }
 
-.top-suit {
+.topSuit {
   @extend %suit;
   align-self: flex-end;
 }
 
-.bottom-suit {
+.bottomSuit {
   @extend %suit;
   align-self: flex-start;
 }
