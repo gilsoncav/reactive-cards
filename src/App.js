@@ -8,27 +8,41 @@ export const kDIAMONDS = 'D';
 export const kJACK = 'J';
 export const kQUEEN = 'Q';
 export const kKING = 'K';
+export const kCardFaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9', kJACK, kQUEEN, kKING];
+export const kSuits = [kSPADES, kCLUBS, kHEARTS, kDIAMONDS];
 
 class DeckModel {
     constructor() {
-        this._kCardFaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9', kJACK, kQUEEN, kKING];
-        this._kSuits = [kSPADES, kCLUBS, kHEARTS, kDIAMONDS];
         this._plainDeck = this._generatePlainDeck();
-        this._shuffledDeck = this._shuffle(this._shuffledDeck);
+        this._shuffledDeck = this._shuffle();
     }
 
     _generatePlainDeck = () => {
         const deck = [];
 
-        this._kSuits.forEach((suit) => {
-            this._kCardFaces.forEach((face) => deck.push(new CardModel(face, suit)));
+        kSuits.forEach((suit) => {
+            kCardFaces.forEach((face) => deck.push(new CardModel(face, suit)));
         })
         return deck;
     }
 
-    _shuffle = (deck) => {
+    _shuffle = () => {
         // TODO implement the shuffling
-        return deck;
+        const result = [];
+        // Creates a Set with indexes not yet randomly picked
+        const notUsedIndexSet = new Set();
+        for (let i = 0; i < this._plainDeck.length; i++) notUsedIndexSet.add(i);
+
+        this._plainDeck.forEach((card) => {
+            const randomIndex = Math.floor( Math.random() * notUsedIndexSet.size);
+            const notUsedIndexArray = Array.from(notUsedIndexSet.values());
+            const destinyIndex = notUsedIndexArray[randomIndex];
+
+            result[destinyIndex] = card;
+            notUsedIndexSet.delete(destinyIndex);
+        });
+
+        return result;
     }
 
     * nextPair() {
@@ -70,13 +84,11 @@ class CardModel {
 }
 
 const CardsTable = () => {
-
     const [deck] = useState(new DeckModel());
-    const [cards]  = useState(deck.plainDeck);
 
     return (
         <div className='CardsTable'>
-            {cards.map((card) =>(
+            {deck.shuffledDeck.map((card) =>(
                 <Card key={card.key} cardModel={card}>
                 </Card>
             ))}
@@ -101,6 +113,5 @@ const App = () => {
         </div>
     )
 }
-
 
 export default App;
