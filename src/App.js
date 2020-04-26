@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './App.scss';
 
 export const kSPADES = 'S';
@@ -8,110 +8,130 @@ export const kDIAMONDS = 'D';
 export const kJACK = 'J';
 export const kQUEEN = 'Q';
 export const kKING = 'K';
-export const kCardFaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9', kJACK, kQUEEN, kKING];
+export const kCardFaces = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  kJACK,
+  kQUEEN,
+  kKING,
+];
 export const kSuits = [kSPADES, kCLUBS, kHEARTS, kDIAMONDS];
 
 class DeckModel {
-    constructor() {
-        this._plainDeck = this._generatePlainDeck();
-        this._shuffledDeck = this._shuffle();
+  constructor() {
+    this._plainDeck = this._generatePlainDeck();
+    this._shuffledDeck = this._shuffle();
+  }
+
+  _generatePlainDeck = () => {
+    const deck = [];
+
+    kSuits.forEach((suit) => {
+      kCardFaces.forEach((face) => deck.push(new CardModel(face, suit)));
+    });
+    return deck;
+  };
+
+  _shuffle = () => {
+    // TODO implement the shuffling
+    const result = [];
+    // Creates a Set with indexes not yet randomly picked
+    const notUsedIndexSet = new Set();
+    for (let i = 0; i < this._plainDeck.length; i++) notUsedIndexSet.add(i);
+
+    this._plainDeck.forEach((card) => {
+      const randomIndex = Math.floor(Math.random() * notUsedIndexSet.size);
+      const notUsedIndexArray = Array.from(notUsedIndexSet.values());
+      const destinyIndex = notUsedIndexArray[randomIndex];
+
+      result[destinyIndex] = card;
+      notUsedIndexSet.delete(destinyIndex);
+    });
+
+    return result;
+  };
+
+  *nextPair() {
+    for (let i = 0; i < this._shuffledDeck.length; i += 2) {
+      yield {
+        card1: this._shuffledDeck[i],
+        card2: this._shuffledDeck[i + 1],
+      };
     }
+  }
 
-    _generatePlainDeck = () => {
-        const deck = [];
+  get shuffledDeck() {
+    return this._shuffledDeck;
+  }
 
-        kSuits.forEach((suit) => {
-            kCardFaces.forEach((face) => deck.push(new CardModel(face, suit)));
-        })
-        return deck;
-    }
-
-    _shuffle = () => {
-        // TODO implement the shuffling
-        const result = [];
-        // Creates a Set with indexes not yet randomly picked
-        const notUsedIndexSet = new Set();
-        for (let i = 0; i < this._plainDeck.length; i++) notUsedIndexSet.add(i);
-
-        this._plainDeck.forEach((card) => {
-            const randomIndex = Math.floor( Math.random() * notUsedIndexSet.size);
-            const notUsedIndexArray = Array.from(notUsedIndexSet.values());
-            const destinyIndex = notUsedIndexArray[randomIndex];
-
-            result[destinyIndex] = card;
-            notUsedIndexSet.delete(destinyIndex);
-        });
-
-        return result;
-    }
-
-    * nextPair() {
-        for (let i = 0; i < this._shuffledDeck.length; i += 2) {
-            yield {
-                card1: this._shuffledDeck[i],
-                card2: this._shuffledDeck[i + 1],
-            }
-        }
-    }
-
-    get shuffledDeck() {
-        return this._shuffledDeck;
-    }
-
-    get plainDeck() {
-        return this._plainDeck;
-    }
-
+  get plainDeck() {
+    return this._plainDeck;
+  }
 }
 
 class CardModel {
-    constructor(face, suit) {
-        this.face = face;
-        this.suit = suit;
-    }
+  constructor(face, suit) {
+    this.face = face;
+    this.suit = suit;
+  }
 
-    get isRedSuit() {
-        return this.suit === kHEARTS || this.suit === kDIAMONDS;
-    }
+  get isRedSuit() {
+    return this.suit === kHEARTS || this.suit === kDIAMONDS;
+  }
 
-    get isBlackSuit() {
-        return this.suit === kCLUBS || this.suit === kSPADES;
-    }
+  get isBlackSuit() {
+    return this.suit === kCLUBS || this.suit === kSPADES;
+  }
 
-    get key() {
-        return this.face + this.suit;
-    }
+  get key() {
+    return this.face + this.suit;
+  }
 }
+
+const Card = ({ cardModel }) => {
+  const handleCardClick = (evt) => {
+    console.dir(evt.target);
+    console.dir(evt.currentTarget);
+  };
+
+  return (
+    <div
+      id={cardModel.key}
+      className={cardModel.isRedSuit ? 'redSuit' : 'blackSuit'}
+      onClick={handleCardClick}
+    >
+      <span className="topSuit">{cardModel.suit}</span>
+      <span className="face">{cardModel.face}</span>
+      <span className="bottomSuit">{cardModel.suit}</span>
+    </div>
+  );
+};
 
 const CardsTable = () => {
-    const [deck] = useState(new DeckModel());
+  const [deck] = useState(new DeckModel());
 
-    return (
-        <div className='CardsTable'>
-            {deck.shuffledDeck.map((card) =>(
-                <Card key={card.key} cardModel={card}>
-                </Card>
-            ))}
-        </div>
-    )
-}
-
-const Card = ({cardModel}) => {
-    return (
-        <div className={cardModel.isRedSuit ? 'redSuit' : 'blackSuit'}>
-            <span className='topSuit'>{cardModel.suit}</span>
-            <span className='face'>{cardModel.face}</span>
-            <span className='bottomSuit'>{cardModel.suit}</span>
-        </div>
-    )
-}
+  return (
+    <div className="CardsTable">
+      {deck.shuffledDeck.map((card) => (
+        <Card key={card.key} cardModel={card}></Card>
+      ))}
+    </div>
+  );
+};
 
 const App = () => {
-    return (
-        <div className='App'>
-            <CardsTable />
-        </div>
-    )
-}
+  return (
+    <div className="App">
+      <CardsTable />
+    </div>
+  );
+};
 
 export default App;

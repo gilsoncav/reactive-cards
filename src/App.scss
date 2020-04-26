@@ -7,7 +7,7 @@ $link: #c30000;
 $light: #f6e8ea;
 $dark: #262626;
 
-$font-stack-themed: "Girassol", "Roboto", sans-serif;
+$font-stack-themed: 'Girassol', 'Roboto', sans-serif;
 
 // common styles to be inherited by most of apps styles...
 %common {
@@ -20,9 +20,8 @@ $font-stack-themed: "Girassol", "Roboto", sans-serif;
 
 .CardsTable {
   border-radius: 20vw;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   margin: 5vh 10vw;
 }
 
